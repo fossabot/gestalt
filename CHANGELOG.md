@@ -8,6 +8,8 @@
 
 ### Minor
 
+- [Internal] Fix caret flow issue
+
 ### Patch
 
 </details>

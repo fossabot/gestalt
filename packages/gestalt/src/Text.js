@@ -44,6 +44,48 @@ type Props = {|
   __dangerouslyIncreaseLineHeight?: boolean,
 |};
 
+function MenuButtonExample() {
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef();
+
+  return (
+    <Box>
+      <Box display="inlineBlock" ref={anchorRef}>
+        <Button
+          accessibilityExpanded={!!open}
+          accessibilityHaspopup
+          color="white"
+          iconEnd="arrow-down"
+          inline
+          onClick={() => setOpen(!open)}
+          text="Menu"
+        />
+      </Box>
+
+      {open && (
+        <Layer>
+          <Flyout
+            anchor={anchorRef.current}
+            idealDirection="down"
+            onDismiss={() => setOpen(false)}
+            positionRelativeToAnchor={false}
+            size="md"
+          >
+            <Box direction="column" display="flex" padding={2}>
+              <Box padding={2}>
+                <Text weight="bold">Option 1</Text>
+              </Box>
+              <Box padding={2}>
+                <Text weight="bold">Option 2</Text>
+              </Box>
+            </Box>
+          </Flyout>
+        </Layer>
+      )}
+    </Box>
+  );
+}
+
 export default function Text({
   align = 'left',
   children,

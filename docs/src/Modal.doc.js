@@ -80,93 +80,45 @@ card(
       All Modals have a max width of 100%.
     `}
     defaultCode={`
-function Example(props) {
-  function reducer(state, action) {
-    switch (action.type) {
-      case 'small':
-        return {modal: 'small'};
-      case 'medium':
-        return {modal: 'medium'};
-      case 'large':
-        return {modal: 'large'};
-      case 'none':
-        return {modal: 'none'};
-      default:
-        throw new Error();
+    function Example(props) {
+      const [showModal, setShowModal] = React.useState(false);
+      const modalRef = React.useRef(null);
+      console.log(modalRef);
+
+      React.useEffect(() => {
+        console.log('useEffect', modalRef.current);
+      }, [modalRef]);
+
+      return (
+        <Box marginLeft={-1} marginRight={-1}>
+          <Box padding={1}>
+            <Button text="View Modal" onClick={() => setShowModal(true)} />
+            {showModal && (
+              <Layer>
+                <Modal
+                  accessibilityModalLabel="View flyout modal"
+                  heading="Modal"
+                  onDismiss={() => {
+                    setShowModal(false);
+                  }}
+                  ref={modalRef}
+                >
+                  <Box height={2000} marginTop={10}>
+                    <Tooltip inline text="Logout" scrollContainerRef={modalRef}>
+                      <Icon
+                        accessibilityLabel="Logout of your profile"
+                        color="pine"
+                        icon="logout"
+                      />
+                    </Tooltip>
+                  </Box>
+                </Modal>
+              </Layer>
+            )}
+          </Box>
+        </Box>
+      );
     }
-  }
-
-  const initialState = {modal: 'none'};
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  return (
-    <Box marginLeft={-1} marginRight={-1}>
-      <Box padding={1}>
-        <Button
-          text="size='sm'"
-          onClick={() => { dispatch({type: 'small'}) }}
-        />
-        {state.modal === 'small' && (
-          <Layer>
-            <Modal
-              accessibilityModalLabel="View default padding and styling"
-              heading="Small modal"
-              onDismiss={() => { dispatch({type: 'none'}) }}
-              footer={<Heading size="md">Footer</Heading>}
-              size="sm"
-            >
-              <Box padding={8}>
-                <Heading size="md">Children</Heading>
-              </Box>
-            </Modal>
-          </Layer>
-        )}
-      </Box>
-      <Box padding={1}>
-        <Button
-          text="size='md'"
-          onClick={() => { dispatch({type: 'medium'}) }}
-        />
-        {state.modal === 'medium' && (
-          <Layer>
-            <Modal
-              accessibilityModalLabel="View default padding and styling"
-              heading="Medium modal"
-              onDismiss={() => { dispatch({type: 'none'}) }}
-              footer={<Heading size="md">Footer</Heading>}
-              size="md"
-            >
-              <Box padding={8}>
-                <Heading size="md">Children</Heading>
-              </Box>
-            </Modal>
-          </Layer>
-        )}
-      </Box>
-      <Box padding={1}>
-        <Button
-          text="size='lg'"
-          onClick={() => { dispatch({type: 'large'}) }}
-        />
-        {state.modal === 'large' && (
-          <Layer>
-            <Modal
-              accessibilityModalLabel="View default padding and styling"
-              heading="Large modal"
-              onDismiss={() => { dispatch({type: 'none'}) }}
-              footer={<Heading size="md">Footer</Heading>}
-              size="lg"
-            >
-              <Box padding={8}>
-                <Heading size="md">Children</Heading>
-              </Box>
-            </Modal>
-          </Layer>
-        )}
-      </Box>
-    </Box>
-  );
-}
 `}
   />
 );
@@ -532,6 +484,69 @@ card(
   <Example
     name="Flyout inside of Modal Example"
     description="Opens a Flyout inside of a Modal and verifies that outside events work as expected with portals"
+    defaultCode={`
+function Example(props) {
+  const [showModal, setShowModal] = React.useState(false);
+  const [showFlyout, setShowFlyout] = React.useState(false);
+  const anchorRef = React.useRef();
+  return (
+    <Box marginLeft={-1} marginRight={-1}>
+      <Box padding={1}>
+        <Button
+          text="View Modal"
+          onClick={() => setShowModal(true)}
+        />
+        {showModal && (
+          <Layer>
+            <Modal
+              accessibilityModalLabel="View flyout modal"
+              heading="Modal"
+              onDismiss={() => {
+                setShowFlyout(false);
+                setShowModal(false)
+              }}
+            >
+              <Box margin={4} ref={anchorRef}>
+                <Button text="Open Flyout" onClick={() => setShowFlyout(true)} />
+              </Box>
+              {showFlyout && (
+                <Layer>
+                  <Flyout
+                    anchor={anchorRef.current}
+                    color="blue"
+                    idealDirection="up"
+                    onDismiss={() => setShowFlyout(false)}
+                    positionRelativeToAnchor={false}
+                    showCaret
+                    shouldFocus={false}
+                    size="md"
+                  >
+                    <Box padding={3}>
+                      <Text color="white" weight="bold">
+                        This flyout is in a React portal.
+                      </Text>
+                      <Box marginTop={3}>
+                        <Button text="Click me and the modal should not close" />
+                      </Box>
+                    </Box>
+                  </Flyout>
+                </Layer>
+              )}
+            </Modal>
+          </Layer>
+        )}
+      </Box>
+    </Box>
+  );
+}
+`}
+  />
+);
+
+card(
+  <Example
+    name="Flyout inside of scrolling Modal Example"
+    description="Opens a Flyout inside of a Modal and verifies scrolling works correctly"
     defaultCode={`
 function Example(props) {
   const [showModal, setShowModal] = React.useState(false);

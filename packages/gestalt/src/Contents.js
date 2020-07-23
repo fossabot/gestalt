@@ -69,6 +69,7 @@ type OwnProps = {|
     y: number,
   |},
   rounding?: 2 | 4,
+  scrollContainerRef?: HTMLElement,
   shouldFocus?: boolean,
   triggerRect: ClientRect,
   width: ?number,
@@ -425,6 +426,7 @@ class WrappedContents extends React.Component<Props, State> {
       caret,
       idealDirection,
       positionRelativeToAnchor,
+      scrollContainerRef,
       relativeOffset,
       triggerRect,
       width,
@@ -440,22 +442,30 @@ class WrappedContents extends React.Component<Props, State> {
     flyoutOffset: {| left: number, top: number |},
     mainDir: 'down' | 'left' | 'right' | 'up',
   |} {
+    console.log('Contents', scrollContainerRef);
+    debugger;
     // Scroll not needed for relative elements
     // We can't use window.scrollX / window.scrollY since it's not supported by IE11
     const scrollX = positionRelativeToAnchor
       ? 0
-      : window.pageXOffset ||
+      : (scrollContainerRef && scrollContainerRef.current.scrollLeft) ||
+        window.pageXOffset ||
         (document.documentElement && document.documentElement.scrollLeft) ||
         0;
     const scrollY = positionRelativeToAnchor
       ? 0
-      : window.pageYOffset ||
+      : (scrollContainerRef && scrollContainerRef.current.scrollTop) ||
+        window.pageYOffset ||
         (document.documentElement && document.documentElement.scrollTop) ||
         0;
 
     const windowSize = {
-      height: window.innerHeight,
-      width: window.innerWidth,
+      height: scrollContainerRef
+        ? scrollContainerRef.clientHeight
+        : window.innerHeight,
+      width: scrollContainerRef
+        ? scrollContainerRef.clientWidth
+        : window.innerWidth,
       scrollX,
       scrollY,
     };
@@ -526,6 +536,7 @@ class WrappedContents extends React.Component<Props, State> {
       children,
       colorGray100,
       isDarkMode,
+      scrollContainerRef,
       rounding,
       width,
     } = this.props;

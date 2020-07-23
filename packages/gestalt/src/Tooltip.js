@@ -11,6 +11,7 @@ const TIMEOUT = 100;
 
 type Props = {|
   children: Node,
+  scrollContainerRef?: HTMLElement,
   link?: Node,
   idealDirection?: 'up' | 'right' | 'down' | 'left',
   inline?: boolean,
@@ -55,6 +56,7 @@ export default function Tooltip({
   link,
   idealDirection = 'down',
   inline,
+  scrollContainerRef,
   text,
 }: Props): Node {
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -79,6 +81,11 @@ export default function Tooltip({
     dispatch({ type: 'hoverOutText' });
   }, TIMEOUT);
 
+  console.log(
+    'Tooltip scrollContainerRef',
+    scrollContainerRef && scrollContainerRef.current
+  );
+
   return (
     <Box display={inline ? 'inlineBlock' : 'block'}>
       <Box
@@ -102,6 +109,7 @@ export default function Tooltip({
             onDismiss={noop}
             positionRelativeToAnchor={false}
             rounding={2}
+            scrollContainerRef={scrollContainerRef}
             size={null}
           >
             <Box

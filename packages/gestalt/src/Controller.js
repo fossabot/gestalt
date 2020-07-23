@@ -15,6 +15,7 @@ type Props = {|
   positionRelativeToAnchor: boolean,
   rounding?: 2 | 4,
   shouldFocus?: boolean,
+  scrollContainerRef?: HTMLElement,
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number | null,
 |};
 
@@ -165,6 +166,7 @@ export default class Controller extends React.Component<Props, State> {
       idealDirection,
       positionRelativeToAnchor,
       rounding,
+      scrollContainerRef,
       shouldFocus,
       size,
     } = this.props;
@@ -184,6 +186,7 @@ export default class Controller extends React.Component<Props, State> {
           positionRelativeToAnchor={positionRelativeToAnchor}
           relativeOffset={relativeOffset}
           rounding={rounding}
+          scrollContainerRef={scrollContainerRef}
           shouldFocus={shouldFocus}
           triggerRect={triggerBoundingRect}
           width={width}

@@ -13,6 +13,7 @@ type Props = {|
   children?: React.Node,
   closeOnOutsideClick?: boolean,
   footer?: React.Node,
+  forwardedRef?: React.Ref<'input'>,
   heading?: string | React.Node,
   onDismiss: () => void,
   role?: 'alertdialog' | 'dialog',
@@ -67,10 +68,11 @@ function Header({ heading }: {| heading: string | React.Node |}) {
   );
 }
 
-export default function Modal({
+function Modal({
   accessibilityModalLabel,
   children,
   closeOnOutsideClick = true,
+  forwardedRef,
   onDismiss,
   footer,
   heading,
@@ -80,6 +82,9 @@ export default function Modal({
   const [showTopShadow, setShowTopShadow] = React.useState(false);
   const [showBottomShadow, setShowBottomShadow] = React.useState(false);
   const content = React.useRef<?HTMLDivElement>(null);
+
+  // $FlowFixMe Flow thinks forwardedRef is a number, which is incorrect
+  React.useImperativeHandle(forwardedRef, () => content.current);
 
   React.useEffect(() => {
     function handleKeyUp(event: {| keyCode: number |}) {
@@ -191,3 +196,18 @@ Modal.propTypes = {
     PropTypes.oneOf(['sm', 'md', 'lg']),
   ]),
 };
+
+function ModalWithRef(props, ref) {
+  return <Modal {...props} forwardedRef={ref} />;
+}
+
+ModalWithRef.displayName = 'ForwardRef(Modal)';
+
+const ModalWithForwardRef: React$AbstractComponent<
+  Props,
+  HTMLInputElement
+> = React.forwardRef<Props, HTMLInputElement>(ModalWithRef);
+
+ModalWithForwardRef.displayName = 'Modal';
+
+export default ModalWithForwardRef;

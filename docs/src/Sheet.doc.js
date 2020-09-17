@@ -162,7 +162,7 @@ function Example(props) {
           inline
           text="Small Sheet"
           onClick={() => { dispatch({ type: 'small' }) }}
-        />        
+        />
       </Box>
       <Box padding={1}>
         <Button
@@ -179,7 +179,7 @@ function Example(props) {
         />
       </Box>
       {state.size && (
-        <Layer>
+        <Layer zIndex={new FixedZIndex(2)}>
           <Sheet
             accessibilityDismissButtonLabel="Dismiss"
             accessibilitySheetLabel="Example sheet to demonstrate different sizes"
@@ -193,7 +193,7 @@ function Example(props) {
             </Box>
           </Sheet>
         </Layer>
-      )}    
+      )}
     </>
   );
 }
@@ -221,7 +221,7 @@ function Example(props) {
         onClick={() => { setShowSheet(!showSheet) }}
       />
       {showSheet && (
-        <Layer>
+        <Layer zIndex={new FixedZIndex(2)}>
           <Sheet
             accessibilityDismissButtonLabel="Dismiss"
             accessibilitySheetLabel="Example sheet to demonstrate preventing close on outside click"
@@ -249,7 +249,7 @@ card(
     name="Default padding &amp; styling"
     description={`
       Some of the padding required to style your sheet has already been provided for ease of use. The sheet shown
-      by clicking on the "View padding" button highlights the default behavior. 
+      by clicking on the "View padding" button highlights the default behavior.
       The shadow (when scrolling) between
       the \`heading\`, \`children\`, and \`footer\` are included as well. Please try scrolling up and down the children to verify the shadow.
     `}
@@ -264,7 +264,7 @@ function Example(props) {
         onClick={() => { setShowSheet(!showSheet) }}
       />
       {showSheet && (
-        <Layer>
+        <Layer zIndex={new FixedZIndex(2)}>
           <Sheet
             accessibilityDismissButtonLabel="Close"
             accessibilitySheetLabel="Example sheet to demonstrate default padding and styling"
@@ -327,7 +327,7 @@ function Example(props) {
                   <li>Dez</li>
                 </ol>
               </Text>
-            </Box>  
+            </Box>
             <Box marginBottom={2}>
               <Text weight="bold">普通话</Text>
               <Text>
@@ -344,7 +344,7 @@ function Example(props) {
                   <li>十</li>
                 </ol>
               </Text>
-            </Box>            
+            </Box>
           </Sheet>
         </Layer>
       )}
@@ -372,7 +372,7 @@ function Example(props) {
         onClick={() => { setShowSheet(!showSheet) }}
       />
       {showSheet && (
-        <Layer>
+        <Layer zIndex={new FixedZIndex(2)}>
           <Sheet
             accessibilityDismissButtonLabel="Close"
             accessibilitySheetLabel="Example to demonstrate empty sheet"
@@ -413,7 +413,7 @@ function HeadingExample(props) {
         onClick={() => { setShowSheet(!showSheet) }}
       />
       {showSheet && (
-        <Layer>
+        <Layer zIndex={new FixedZIndex(2)}>
           <Sheet
             accessibilityDismissButtonLabel="Close"
             accessibilitySheetLabel="Example Sheet to demonstrate custom sheet heading"
@@ -483,7 +483,7 @@ function SheetRefExample() {
         text="Open sheet"
         onClick={() => { setShowSheet(!showSheet) }}
       />
-      <Layer>
+      <Layer zIndex={new FixedZIndex(2)}>
         {showSheet && (
           <Sheet
             accessibilityDismissButtonLabel="Close"
@@ -495,7 +495,7 @@ function SheetRefExample() {
             <Box padding={4}>
               <Box color="white" minHeight={400} padding={4}>
                 <Box marginBottom={4}>
-                  <Heading size="md">Focused content</Heading>                
+                  <Heading size="md">Focused content</Heading>
                 </Box>
                 <Button text="Focused button" inline ref={buttonRef} />
               </Box>

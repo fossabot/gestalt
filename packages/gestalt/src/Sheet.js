@@ -10,7 +10,6 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ESCAPE_KEY_CODE } from './keyCodes.js';
-import { FixedZIndex } from './zIndex.js';
 import Box from './Box.js';
 import Backdrop from './Backdrop.js';
 import focusStyles from './Focus.css';
@@ -42,8 +41,6 @@ const SIZE_WIDTH_MAP = {
   md: 720,
   lg: 900,
 };
-
-const DEFAULT_ZINDEX = new FixedZIndex(1);
 
 const Header = ({ heading }: {| heading: HeadingType |}) => {
   if (typeof heading !== 'string') {
@@ -150,18 +147,10 @@ const SheetWithForwardRef: React$AbstractComponent<
 
   const width = typeof size === 'string' ? SIZE_WIDTH_MAP[size] : size;
 
-  const containerStyle = {
-    zIndex: DEFAULT_ZINDEX.index(),
-  };
-
   return (
     <StopScrollBehavior>
       <TrapFocusBehavior>
-        <div
-          className={sheetStyles.container}
-          ref={containerRef}
-          style={containerStyle}
-        >
+        <div className={sheetStyles.container} ref={containerRef}>
           <Backdrop
             animation={currentAnimation}
             closeOnOutsideClick={closeOnOutsideClick}

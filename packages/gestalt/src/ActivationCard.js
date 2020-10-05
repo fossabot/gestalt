@@ -8,7 +8,6 @@ import Icon from './Icon.js';
 import IconButton from './IconButton.js';
 import Button from './Button.js';
 import Text from './Text.js';
-import { useColorScheme } from './contexts/ColorScheme.js';
 import { type AbstractEventHandler } from './AbstractEventHandler.js';
 import styles from './ActivationCard.css';
 
@@ -83,7 +82,15 @@ export default function ActivationCard({
   const icon = STATUS_ICONS[status];
 
   return (
-    <Box flex="grow" borderSize="sm" rounding={4} padding={6} maxWidth={400}>
+    <Box
+      borderSize="sm"
+      rounding={4}
+      padding={6}
+      height="100%"
+      maxWidth={400}
+      display="flex"
+      direction="column"
+    >
       <Box display="flex" alignContent="center">
         {icon && (
           <Box marginEnd={2}>
@@ -98,17 +105,25 @@ export default function ActivationCard({
           {statusMessage}
         </Text>
       </Box>
+
       {title && (
         <Box marginTop={6} marginBottom={2}>
           <Heading size="sm">{title}</Heading>
         </Box>
       )}
-      {message && (
-        <Text color="gray" size="md">
-          {message}
-        </Text>
+
+      <Box flex="grow">
+        {message && (
+          <Text color="gray" size="md">
+            {message}
+          </Text>
+        )}
+      </Box>
+      {linkData && (
+        <Box>
+          <ActivationCardLink data={linkData} />
+        </Box>
       )}
-      {linkData && <ActivationCardLink data={linkData} />}
       {dismissButton && (
         <div className={classnames(styles.rtlPos)}>
           <IconButton

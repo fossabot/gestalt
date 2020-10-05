@@ -18,25 +18,29 @@ card(
   <Example
     name="Example"
     defaultCode={`
-<Box display="flex" justifyContent="between">
-  <ActivationCard
-    status="pending"
-    statusMessage="Pending"
-    title="Claiming your website"
-    message="We will notify you via email as soon as your site has been successfully claimed"
-    linkData={{href: "https://pinterest.com", label:"Learn more"}}
-  />
-  <ActivationCard
-    status="needsAttention"
-    statusMessage="Needs attention"
-    title="Tag is unhealthy"
-    message="Oops! Your tag must be healthy to continue."
-    linkData={{href: "https://pinterest.com", label:"Learn more"}}
-    dismissButton={{
-      accessibilityLabel: 'Dismiss card',
-      onDismiss: ()=>{},
-    }}
-  />
+<Box display="flex" marginStart={-1} marginEnd={-1}>
+  <Box paddingX={1}>
+    <ActivationCard
+      status="pending"
+      statusMessage="Pending"
+      title="Claiming your website"
+      message="We will notify you via email as soon as your site has been successfully claimed We will notify you via email as soon as your site has been successfully claimed We will notify you via email as soon as your site has been successfully claimed"
+      linkData={{href: "https://pinterest.com", label:"Learn more"}}
+    />
+  </Box>
+  <Box paddingX={1}>
+    <ActivationCard
+      status="needsAttention"
+      statusMessage="Needs attention"
+      title="Tag is unhealthy"
+      message="Oops! Your tag must be healthy to continue."
+      linkData={{href: "https://pinterest.com", label:"Learn more"}}
+      dismissButton={{
+        accessibilityLabel: 'Dismiss card',
+        onDismiss: ()=>{},
+      }}
+    />
+  </Box>
 </Box>
   `}
   />

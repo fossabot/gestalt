@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import {
   commands,
+  window,
   languages,
   DocumentSelector,
   Disposable,
@@ -40,6 +41,19 @@ export function activate(context: ExtensionContext) {
   });
 
   addProviders();
+
+  // languages.registerInlineCompletionItemProvider(
+  //   { pattern: "**" },
+  //   snippetInlineCompletionItemProvider
+  // );
+
+  // Be aware that the API around `getInlineCompletionItemController` will not be finalized as is!
+  // window
+  //   .getInlineCompletionItemController(snippetInlineCompletionItemProvider)
+  //   .onDidShowCompletionItem((e) => {
+  //     const id = e.completionItem.trackingId;
+  //     log.append(`//// Tracking ID: ${id}`);
+  //   });
 
   // // The command has been defined in the package.json file
   // // Now provide the implementation of the command with registerCommand

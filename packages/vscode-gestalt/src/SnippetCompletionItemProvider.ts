@@ -12,6 +12,7 @@ import {
   CompletionTriggerKind,
   CancellationToken,
   TextDocument,
+  Range,
 } from "vscode";
 import snippets from "./snippets.json";
 import { MarkdownString } from "vscode";
@@ -22,11 +23,23 @@ class SnippetCompletionItem implements CompletionItem {
   label: string;
   detail: string;
   insertText?: SnippetString;
+  range: Range;
   documentation?: MarkdownString;
 
-  constructor(label: string, prefix: string, text: SnippetString) {
+  constructor({
+    label,
+    prefix,
+    text,
+    range,
+  }: {
+    label: string;
+    prefix: string;
+    text: SnippetString;
+    range: Range;
+  }) {
     this.label = prefix;
     this.insertText = text;
+    this.range = range;
     this.detail = label;
     this.kind = CompletionItemKind.Snippet;
   }
@@ -38,7 +51,6 @@ class SnippetCompletionItem implements CompletionItem {
     // );
     const text = new SnippetParser().text(this.insertText?.value ?? "");
     this.documentation = new MarkdownString().appendCodeblock(text);
-    this.detail = this.detail;
 
     return this;
   }
@@ -52,37 +64,54 @@ class SnippetCompletionItemProvider
     return item instanceof SnippetCompletionItem ? item.resolve() : item;
   }
 
-  public async provideCompletionItems(
+  public provideCompletionItems(
     document: TextDocument,
     position: Position,
     token: CancellationToken,
     context: CompletionContext
-  ): Promise<CompletionList<CompletionItem> | undefined> {
+  ): CompletionList<CompletionItem> | undefined {
     log.append("provideCompletionItems");
-    log.append(JSON.stringify(snippets, null, 2));
+    // log.append(JSON.stringify(snippets, null, 2));
 
-    if (
-      context.triggerKind === CompletionTriggerKind.TriggerCharacter &&
-      context.triggerCharacter === " "
-    ) {
-      // no snippets when suggestions have been triggered by space
+    // const textBeforeCursor = document
+    //   .getText(new Range(position.with(undefined, 0), position))
+    //   .split(/(\s+)/)[0];
+
+    const textBeforeCursor = document
+      .getText(document.lineAt(position.line).range)
+      .trim();
+
+    if (!textBeforeCursor) {
       return undefined;
     }
 
+    log.append(`textBeforeCursor: ${textBeforeCursor}`);
+
+    // console.log(position,snippets);
+
     return new CompletionList(
-      Object.entries(snippets).map(([label, { prefix, body }]) => {
-        console.log(document, token, position, snippets);
+      Object.entries(snippets)
+        .filter(([_, { prefix }]) => {
+          return prefix
+            .toLocaleLowerCase()
+            .startsWith(textBeforeCursor.toLocaleLowerCase());
+        })
+        .map(([label, { prefix, body }]) => {
+          const text = body.join("\n");
+          const completionItem = new SnippetCompletionItem({
+            label,
+            prefix,
+            range: new Range(
+              position.translate(0, -textBeforeCursor.length),
+              position
+            ),
+            text: new SnippetString(text),
+          });
 
-        // const prefixPos = position.column - (1 + start);
+          log.append(`label: ${label}`);
 
-        const completionItem = new SnippetCompletionItem(
-          label,
-          prefix,
-          new SnippetString(body.join("\n"))
-        );
-
-        return completionItem;
-      })
+          return completionItem;
+        })
     );
 
     // return undefined;
